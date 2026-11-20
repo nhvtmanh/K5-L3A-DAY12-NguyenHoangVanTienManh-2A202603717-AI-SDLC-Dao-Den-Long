@@ -5,16 +5,16 @@ const ring = (count, radius, cx = 0, cz = 0, start = 0, y = 0, spacing = 360 / c
   });
 const lamps = positions => positions.map((pos, i) => ({ id: `L${i + 1}`, pos, lit: false, deposited: 0 }));
 export const NIGHTS = {
-  1: { name: 'Đảo Bến', duration: 300, shadeInterval: 480, shadeCap: 6, shadeSpeed: 4,
+  1: { name: 'Đảo Bến', duration: 240, shadeInterval: 480, shadeCap: 6, shadeSpeed: 4,
     islands: [[0, 0, 40]], pads: [],
     lanterns: lamps([[0,0,25],[23.8,0,7.7],[14.7,0,-20.2],[-14.7,0,-20.2],[-23.8,0,7.7]]),
     motePoints: [...ring(8,12), ...ring(16,33)], shadePoints: ring(12,37,0,0,15), charms: [] },
-  2: { name: 'Đảo Cau', duration: 330, shadeInterval: 420, shadeCap: 8, shadeSpeed: 4,
+  2: { name: 'Đảo Cau', duration: 270, shadeInterval: 420, shadeCap: 8, shadeSpeed: 4,
     islands: [[0,0,28],[70,0,28]], pads: [{ pos:[20,0,18], vy:14, speed:24, target:[70,0,0] }, { pos:[50,0,-18], vy:14, speed:24, target:[0,0,0] }],
     lanterns: lamps([[0,0,20],[17,0,-10],[-17,0,-10],[70,0,20],[87,0,-10],[53,0,-10]]),
     motePoints: [...ring(4,10),...ring(8,22),...ring(4,10,70),...ring(8,22,70)],
     shadePoints: [...ring(8,26,0,0,22.5),...ring(8,26,70,0,22.5)], charms:[{id:'C1',pos:[35,0,0]}] },
-  3: { name: 'Đảo Chuông', duration: 360, shadeInterval: 360, shadeCap: 10, shadeSpeed: 4.5,
+  3: { name: 'Đảo Chuông', duration: 300, shadeInterval: 360, shadeCap: 10, shadeSpeed: 4.5,
     islands: [[0,0,45]], pads:[{pos:[0,3,13],vy:12,speed:8,target:[0,3,0]}],
     lanterns: lamps([[0,6,6],[18,3,10],[-18,3,10],[35,0,-10],[-35,0,-10],[20,0,-35],[-20,0,-35]]),
     motePoints:[...ring(18,34),...ring(8,18,0,0,20,3,20),...ring(4,5,0,0,45,6)],

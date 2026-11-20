@@ -1,0 +1,7 @@
+Phase 3 pre-change baseline
+HEAD/tag phase-2: dfa86e25e7f23b8f608ab57469024aac212842f2.
+Working tree clean before Phase3 planning documents.
+
+Executed npm test before changes:31tests passed,0failed,0skipped.
+No gameplay, tuning, CLI or renderer changed during this planning step.
+This is baseline evidence only, not proof of Ticket-03 compliance.

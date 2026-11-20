@@ -17,7 +17,7 @@ test('pickup is inclusive in XZ, capacity leaves excess motes, scenario grants n
   assert.deepEqual(step(outside), []); assert.equal(outside.player.carried, 0);
 });
 
-test('partial deposits, nearest unlit lantern, inclusive radius, and interaction rising edges', () => {
+test('partial deposits, nearest receiving lantern, inclusive radius, rising edges and refuel', () => {
   const g = createGame({ random_motes: false, player: { carried: 3 }, lanterns: [{ id: 'L1', pos: [2, 0, 0] }] });
   assert.deepEqual(step(g, { interact: true }), [{ type: 'event', tick: 1, name: 'deposit', data: { lantern_id: 'L1', amount: 3, deposited: 3 } }]);
   g.player.carried = 10;
@@ -25,8 +25,8 @@ test('partial deposits, nearest unlit lantern, inclusive radius, and interaction
   step(g, { interact: false });
   const events = step(g, { interact: true });
   assert.deepEqual(events.map(e => e.name), ['deposit', 'lantern_lit']);
-  assert.equal(events[0].data.amount, 7); assert.equal(g.player.carried, 3); assert.equal(g.score, 200);
-  step(g, { interact: false }); assert.deepEqual(step(g, { interact: true }), []);
+  assert.equal(events[0].data.amount, 7); assert.equal(g.player.carried, 3); assert.equal(g.score, 150);
+  step(g, { interact: false }); assert.equal(step(g, { interact: true })[0].name, 'refuel');
   const nearest = createGame({ random_motes: false, player: { carried: 20 }, lanterns: [{ id: 'L1', pos: [2, 0, 0] }, { id: 'L2', pos: [1, 0, 0] }] });
   assert.equal(step(nearest, { interact: true })[0].data.lantern_id, 'L2');
   const tie = createGame({ random_motes: false, player: { carried: 20 }, lanterns: [{ id: 'L2', pos: [-1, 0, 0] }, { id: 'L1', pos: [1, 0, 0] }] });
@@ -55,25 +55,25 @@ test('contract tuning matches implemented mechanics', () => {
   assert.equal(contract.tuning.lantern_count_night1, createGame().lanterns.length);
 });
 
-test('all five initially unlit lanterns can be completed using finite motes', () => {
-  const g = createGame({ random_motes: false, player: { carried: 10 },
-    motes: Array.from({ length: 40 }, () => [0, 0, 0]),
-    lanterns: Array.from({ length: 5 }, (_, i) => ({ id: `L${i + 1}`, pos: [0, 0, 0] })),
+test('five first ignitions with finite motes grow capacity but do not end the night', () => {
+  const g = createGame({ random_motes: false, random_shades:false,
+    motes: Array.from({ length: 5 },(_,i)=>Array.from({length:10},()=>[i*5,0,0])).flat(),
+    lanterns: Array.from({ length: 5 }, (_, i) => ({ id: `L${i + 1}`, pos: [i*5, 0, 0] })),
   });
-  const events = [];
-  for (let k = 0; k < 9; k++) events.push(...step(g, { interact: k % 2 === 0 }));
-  assert.equal(g.state, 'won'); assert.equal(g.tick, 9);
+  const events = [...step(g,{interact:true})];
+  for(let i=1;i<5;i++){for(let j=0;j<50;j++)events.push(...step(g,{move:[1,0]}));events.push(...step(g,{interact:true}));}
+  assert.equal(g.state, 'playing');assert.equal(snapshot(g).player.capacity,20);
   assert.equal(g.player.carried, 0); assert.equal(g.motes.length, 0);
-  assert.equal(events.filter(e => e.name === 'mote_picked').length, 40);
+  assert.equal(events.filter(e => e.name === 'mote_picked').length, 50);
   assert.deepEqual(events.filter(e => e.name === 'lantern_lit').map(e => e.data.lantern_id), ['L1', 'L2', 'L3', 'L4', 'L5']);
-  assert.equal(g.score, 1748);
+  assert.equal(g.score, 750);
 });
 
 test('terminal precedence and win reward applied only once', () => {
   const lanterns = Array.from({ length: 5 }, (_, i) => ({ id: `L${i + 1}`, lit: true }));
   const won = createGame({ random_motes: false, lanterns, time_left_s: 0 });
-  assert.equal(step(won)[0].data.reason, 'all_lit');
-  assert.equal(won.score, 150); assert.deepEqual(step(won), []); assert.equal(won.score, 150);
+  assert.equal(step(won)[0].data.reason, 'dawn_survived');
+  assert.equal(won.score, 895); assert.deepEqual(step(won), []); assert.equal(won.score, 895);
   const dead = createGame({ random_motes: false, lanterns, player: { flames: 0 }, time_left_s: 0 });
   assert.equal(step(dead)[0].data.reason, 'no_flames'); assert.equal(dead.score, 0);
 });
@@ -94,11 +94,11 @@ test('CLI collection-to-win fixture has exact events, snapshots and deterministi
       assert.deepEqual(rows.filter(r => r.type === 'event' && r.tick>0), [
         { type: 'event', tick: 1, name: 'mote_picked', data: { carried: 10 } },
         { type: 'event', tick: 1, name: 'deposit', data: { lantern_id: 'L1', amount: 10, deposited: 10 } },
-        { type: 'event', tick: 1, name: 'lantern_lit', data: { lantern_id: 'L1' } },
-        { type: 'event', tick: 1, name: 'game_over', data: { result: 'won', reason: 'all_lit' } },
+        { type: 'event', tick: 1, name: 'lantern_lit', data: { lantern_id: 'L1',relight:false } },
+        { type: 'event', tick: 1, name: 'game_over', data: { result: 'won', reason: 'dawn_survived' } },
       ]);
       assert.equal(rows.at(-2).player.carried, 0); assert.equal(rows.at(-2).motes_active, 0);
-      assert.deepEqual(rows.at(-1), { type: 'end', ticks: 1, state: 'won', score: 948 });
+      assert.deepEqual(rows.at(-1), { type: 'end', ticks: 1, state: 'won', score: 1046 });
     }
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

@@ -28,7 +28,7 @@ test('CLI tick boundaries, sticky input, determinism, dawn and invalid JSON', ()
     assert.equal(readFileSync(a, 'utf8'), readFileSync(b, 'utf8'));
     const rows = readFileSync(a, 'utf8').trim().split('\n').map(JSON.parse);
     assert.equal(rows[0].tick, 0); assert.equal(rows[0].player.pos[2], 0);
-    assert.equal(rows.at(-2).player.pos[2], 6); assert.equal(rows.at(-2).time_left_s, 299);
+    assert.equal(rows.at(-2).player.pos[2], 6); assert.equal(rows.at(-2).time_left_s, 239);
     assert.deepEqual(rows.at(-1), { type: 'end', ticks: 60, state: 'playing', score: 0 });
     writeFileSync(scenario, JSON.stringify({ time_left_s: 1 / 60, random_motes: false }));
     assert.equal(run(a, ['--scenario', scenario]).status, 0);

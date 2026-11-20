@@ -1,0 +1,21 @@
+Phase3 fresh-source installation verification
+Environment: Windows, Node v24.18.0, npm11.16.0.
+
+Copied135 source/evidence files to .scratch/phase3-clean-install, excluding .git,
+node_modules, dist and other ignored paths. No previous installed modules/build copied.
+
+Executed in that directory:
+- npm ci --offline --no-audit --no-fund --logs-dir .npm-logs: PASS,17packages installed from local npm download cache.
+- npm test: PASS,43tests,0fail,0skip.
+- npm run build: PASS,Vite7.3.8,15modules,JS539.35kB,gzip141.54kB.
+- npm run verify:phase3: PASS,13CLI fixtures, deterministic two-run comparison.
+- npm run verify:phase1: PASS,defaultNight1 dawn_survived at14400ticks,1139points,3lit; idle loss14400.
+
+The browser harness was subsequently corrected to wait for the rendering frame after
+changing the colorblind setting, retaining the material-color assertion. That script was
+copied into the clean directory too; no gameplay code or dependencies changed.
+
+Warnings retained: esbuild allowScripts; Vite chunk over500kB. Actual build passed.
+Scope: a fresh-source installation on Windows, not proof of a published phase-3 tag or
+Linux/macOS execution. A true clone of phase-3 must be verified after a successful release;
+it was not performed because permission to commit/tag/push was declined.

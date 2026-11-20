@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
-const folder='docs/proof/phase-2';mkdirSync(folder,{recursive:true});
+const folder=JSON.parse(readFileSync('game.contract.json','utf8')).contract_version==='1.2'?'docs/proof/phase-3/regression-phase2':'docs/proof/phase-2';mkdirSync(folder,{recursive:true});
 const fixtures=JSON.parse(readFileSync('tests/fixtures/phase2/scenarios.json','utf8'));
 const temp=mkdtempSync(join(tmpdir(),'lantern-proof-')),report={node:process.version,platform:platform(),cpu:cpus()[0]?.model,fixtures:[],benchmarks:[]};
 function run(c,out){const s=join(temp,'scenario.json'),i=join(temp,'inputs.json');writeFileSync(s,JSON.stringify(c.scenario));writeFileSync(i,JSON.stringify({frames:c.frames}));const start=performance.now();const result=spawnSync(process.execPath,['src/headless/cli.js','--seed','7','--night',String(c.night),'--ticks',String(c.ticks),'--scenario',s,'--inputs',i,'--out',out],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);return {raw:readFileSync(out,'utf8'),seconds:(performance.now()-start)/1000};}

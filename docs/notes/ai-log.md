@@ -60,3 +60,29 @@
   dùngWebAudio thay tài sảnngoài và không đổi công nghệ.
 - Kết quả cuối cục bộ:31test đạt; nguồn sạch cài bằng npmci offline, test/build/replays đạt.
   Bổ sung case ID Gió Lạc scenario không được trùng ID sinh tự động. Không ghi đè proofPhase1.
+
+## Phase 3 — Ticket-03
+
+- Baseline31test đạt tại tagphase-2. Đọc CR và lập spec/ADR/changelog trước code.
+- Hỏi3chi tiết, nhận “đồng ý cả3” trước khi triển khai: drain cadence sim_tick60k,
+  wander bước recovery, normalization scenario. Các số chuẩn của ticket giữ nguyên.
+- Tách lanterns.js để tập trung fuelUnits1/60, refuel/relight/capacity/safe và dawn scoring.
+  Thêm drain/targeting/recovery vào simulation, nâng validation/snapshot/contract1.2.
+- Cập nhật các test all_lit/lit-unreceiving/score/time/stun bị thay, có lý do trong delivery;
+  không skip. Thêm13fixture1.2 và12test mới; tổng43test.
+- Thêm fuelbar/1Hz blink, đèn xẹp/rách cả4mặt, cài đặt mù màu lưu; actualrenderer diagnostics
+  hỗ trợ xác minh eye/rim/warning và silhouette bằng browser.
+- Controller cũ không phù hợp mục tiêu dawn. Viết controller duy trì3đèn, vẫn chỉ xuất inputthường;
+  bản nháp có lỗi dùng carried trên mảngpos, được phát hiện vì replay đầy túi nhưng0điểm. Sửa
+  controller, không đổi game. Kết quảdefaultseed7 won14400tick,1139điểm,3đèn sáng.
+- Script replay cũ giả định game_over luôn là dòng kếcuối; tick14400 có snapshot nên sai.
+  Sửa tìm event game_over theo type/name, không đổi quy tắc snapshot/end.
+- Phát hiện scenario fallback-target ban đầu đặt bóng trong safezone nên không thể wander;
+  chỉnh fixture ra ngoài safezone, không bỏ điều kiện safe hoặc nới luật để test qua.
+- Chạy lại fixturesPhase2 và benchmark, lưu mới dưới proofPhase3; artifactsPhase1/2 và tags giữ nguyên.
+- Token/chi phí chưa có số liệu; không tạo ước tính không có cơ sở. Dùng helperthuần+scenario ngắn
+  để kiểm tra ranh giới trước browser, không thêm dependency/asset bên ngoài.
+- Browser check có race: checkbox cập nhật setting trước frame render đổi material. Giữ assertion
+  màu thực tế, chờ frame renderer hoàn tất thay vì chỉ chờ flagsetting; không bỏ assertion để test qua.
+- Quyền chạy commit/tag/push Phase3 bị từ chối trước khi lệnh thực thi. HEAD vẫn phase-2,
+  chưa có tagphase-3; giữ toàn bộ thay đổi và proof ở workspace, không thử cách khác để ghi Git.

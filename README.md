@@ -1,4 +1,54 @@
-# Đảo Đèn Lồng — Phase 2: Ba hòn đảo
+# Đảo Đèn Lồng — Phase 3: Đèn cạn dầu
+
+Game 3D JavaScript + Three.js + Vite, headless Node.js theo **Contract v1.2**.
+Node.js >=22.12 và trình duyệt WebGL2. Cài và chơi trong2lệnh:
+
+```sh
+npm ci
+npm run dev
+```
+
+Mở URL Vite → Bắt đầu → Vào Đêm. PowerShell có thể dùng npm.cmd nếu npm.ps1 bị chặn.
+WASD di chuyển, chuột nhìn, Space nhảy, Shift lướt, E nạp/châm dầu, Q tỏa sáng, Esc/P pause.
+Cài đặt có âm lượng, độ nhạy và **Bảng màu dễ phân biệt**, lưu sau khi mở lại.
+
+**Mục tiêu mới:** sống tới bình minh và giữ ít nhất **3/5,4/6,5/7** đèn sáng ở cuối Đêm1/2/3.
+Thời lượng240/270/300s. Thắp hết đèn không kết thúc sớm; hết Ngọn Lửa luôn thua trước.
+Đèn mới cần10đom đóm; thắp lại cần5. Mỗi lần sáng được100dầu, hao1/s, E châm10dầu/con.
+Dưới30dầu mất safezone và có thể bị Bóng Mực wander hút thêm5/s/con; đúng30vẫn an toàn.
+Sức chứa10+2mỗi lần thắp thành công, tối đa20, reset mỗiĐêm.
+
+**Điểm:** +5/con nạp hoặc châm; +100/lần đầu, +40/thắp lại; pulse+5/Bóng Mực hoặc tổng+15
+nếu ngay trước pulse nó đang drain. Khi thắng, mỗi đèn sáng được50+floor(dầu), mỗi máu50.
+Không thưởng thời gian. Tổng hành trình chỉ cộng các Đêm đã thắng.
+
+Đèn đang sáng có thanh dầu, yếu<30nhấp nháy1Hz; đèn tắt xẹp20% và giấy rách.
+Chế độ dễ phân biệt đổi mắt/viền Bóng Mực sang xanh#00B3FF, cảnh báo trắng kèm⚠.
+
+```sh
+node src/headless/cli.js --seed 7 --night 1 --ticks 14400 --out result.jsonl
+```
+
+Headless hỗ trợ --night1/2/3, --scenario, --inputs, --snapshot-every; không cửa sổ/GPU/audio.
+Kiểm chứng và tái tạo bằng chứng mới (không ghi đè artifactsPhase1/2):
+
+```sh
+npm test
+npm run verify:phase3
+npm run verify:phase1
+```
+
+`verify:phase1` nay kiểm tra Đêm1 **sống tới bình minh** với luật hiện hành; script all_lit cũ chỉ còn tại tagphase-2.
+`npm run verify:phase2` chạy lại scenario các tính năng không bị thay. `npm run build` tạo bảnweb,
+`npm run preview` phục vụ; `npm run test:browser` cần Chrome cài sẵn, hoặc BROWSER_CHANNEL=msedge.
+
+[Bàn giao Phase3](docs/phase-3-delivery.md) · [ADR](docs/adr/0001-lantern-fuel-and-dawn.md) · [Breaking changes](CHANGELOG.md) · [Spec/plan](docs/phase-3-spec.md).
+Giả định scenario/cadence/recovery đã được người dùng duyệt; dầu nội bộ là số nguyên1/60, không dùng fuel làm tròn để xét luật.
+Mã game giữ bản quyền theo [LICENSE](LICENSE); nguồn ở [CREDITS.md](CREDITS.md).
+
+<details><summary>Phase 2 và Phase 1 — ghi nhận lịch sử, không dùng thông số cũ cho bản hiện tại</summary>
+
+## Đảo Đèn Lồng — Phase 2: Ba hòn đảo
 
 Game 3D JavaScript + Three.js + Vite, logic thuần Node.js theo **Test Contract v1.1**.
 Yêu cầu Node.js >=22.12, npm và trình duyệt hỗ trợ WebGL2. Không cần tài khoản/API key.
@@ -124,6 +174,8 @@ Mã game giữ bản quyền, cho phép xem/chạy/chấm bài theo [LICENSE](LI
 Chưa thêm cơ chế sáng tạo ngoài PRD. Đồ họa ban đầu dựng từ khối hình học bằng code.
 
 ---
+
+</details>
 
 </details>
 

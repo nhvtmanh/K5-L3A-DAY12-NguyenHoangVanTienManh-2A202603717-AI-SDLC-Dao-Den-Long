@@ -1,0 +1,150 @@
+{
+  "node": "v24.18.0",
+  "cpu": "AMD Ryzen 5 5600H with Radeon Graphics         ",
+  "contract": "1.2",
+  "fixtures": [
+    {
+      "name": "fuel-out",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "refuel",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 20
+      }
+    },
+    {
+      "name": "relight",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 65
+      }
+    },
+    {
+      "name": "drain-stacking",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "restore-safe",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 30,
+        "state": "playing",
+        "score": 5
+      }
+    },
+    {
+      "name": "pulse-drain",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 15
+      }
+    },
+    {
+      "name": "dawn-night1",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 597
+      }
+    },
+    {
+      "name": "dawn-night2",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 746
+      }
+    },
+    {
+      "name": "dawn-night3",
+      "night": 3,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 895
+      }
+    },
+    {
+      "name": "last-tick-out",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "lost",
+        "score": 0
+      }
+    },
+    {
+      "name": "last-tick-relight",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 663
+      }
+    },
+    {
+      "name": "last-tick-hit",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "lost",
+        "score": 0
+      }
+    },
+    {
+      "name": "fuel-pause",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 65,
+        "state": "playing",
+        "score": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "seed": 7,
+  "scenario": "none; default Night1, no overrides",
+  "deterministic": true,
+  "won": {
+    "type": "end",
+    "ticks": 14400,
+    "state": "won",
+    "score": 1139
+  },
+  "lit_at_dawn": 3,
+  "idle_loss": {
+    "type": "end",
+    "ticks": 14400,
+    "state": "lost",
+    "score": 0
+  },
+  "events": {
+    "night_start": 1,
+    "mote_picked": 75,
+    "shade_spawned": 6,
+    "deposit": 4,
+    "lantern_lit": 4,
+    "dash": 34,
+    "pulse": 4,
+    "refuel": 5,
+    "fuel_drain": 5,
+    "lantern_out": 1,
+    "game_over": 1
+  }
+}

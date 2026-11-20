@@ -1,0 +1,174 @@
+{
+  "node": "v24.18.0",
+  "platform": "win32",
+  "cpu": "AMD Ryzen 5 5600H with Radeon Graphics         ",
+  "fixtures": [
+    {
+      "name": "dash",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 12,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.0532484
+    },
+    {
+      "name": "air-dash",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 12,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.0501542
+    },
+    {
+      "name": "pause",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 8,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.04890020000000004
+    },
+    {
+      "name": "fall",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 61,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.05779220000000004
+    },
+    {
+      "name": "launch-night2",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 90,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.05374860000000001
+    },
+    {
+      "name": "launch-night3",
+      "night": 3,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 80,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.0584008
+    },
+    {
+      "name": "charm",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 14,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.05158550000000003
+    },
+    {
+      "name": "drifter-steal",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 2,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.054522300000000086
+    },
+    {
+      "name": "drifter-drop",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 2,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.04787649999999997
+    },
+    {
+      "name": "spawn-schedule",
+      "night": 2,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1200,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.08265359999999998
+    },
+    {
+      "name": "wind",
+      "night": 3,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1801,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.06170389999999998
+    },
+    {
+      "name": "pickup-height",
+      "night": 1,
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 0
+      },
+      "seconds": 0.052386000000000196
+    }
+  ],
+  "benchmarks": [
+    {
+      "night": 1,
+      "ticks": 21600,
+      "seconds": 0.35028870000000006,
+      "scenario": "360s duration + initial invulnerability to prevent early exit; otherwise normal spawns/wind",
+      "passed": true
+    },
+    {
+      "night": 2,
+      "ticks": 21600,
+      "seconds": 0.5656826999999999,
+      "scenario": "360s duration + initial invulnerability to prevent early exit; otherwise normal spawns/wind",
+      "passed": true
+    },
+    {
+      "night": 3,
+      "ticks": 21600,
+      "seconds": 0.7576893999999997,
+      "scenario": "360s duration + initial invulnerability to prevent early exit; otherwise normal spawns/wind",
+      "passed": true
+    }
+  ]
+}

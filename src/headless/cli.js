@@ -13,7 +13,7 @@ function validateScenario(s, night) {
   if (s.player !== undefined) {
     if (!s.player || typeof s.player !== 'object' || Array.isArray(s.player)) fail('Invalid player');
     if (s.player.pos !== undefined && !vector(s.player.pos)) fail('Invalid player.pos');
-    for (const key of ['carried', 'flames']) if (s.player[key] !== undefined && (!Number.isInteger(s.player[key]) || s.player[key] < 0)) fail(`Invalid player.${key}`);
+    for (const key of ['carried', 'flames','successful_lights']) if (s.player[key] !== undefined && (!Number.isSafeInteger(s.player[key]) || s.player[key] < 0)) fail(`Invalid player.${key}`);
     for (const key of ['invuln_ticks','dash_cd_ticks','pulse_cd_ticks','charm_ticks']) if(s.player[key]!==undefined&&(!Number.isSafeInteger(s.player[key])||s.player[key]<0)) fail(`Invalid player.${key}`);
   }
   for (const key of ['random_motes', 'random_shades','random_drifters','wind_enabled']) if (s[key] !== undefined && typeof s[key] !== 'boolean') fail(`Invalid ${key}`);
@@ -24,7 +24,8 @@ function validateScenario(s, night) {
   const shadeIds = s.shades?.filter(v => v.id !== undefined).map(v => v.id) ?? [];
   if (new Set(shadeIds).size !== shadeIds.length) fail('Duplicate shade IDs');
   if (s.lanterns?.some(v => !v || !new RegExp(`^L[1-${night+4}]$`).test(v.id) || (v.pos !== undefined && !vector(v.pos)) || (v.lit !== undefined && typeof v.lit !== 'boolean') || (v.deposited !== undefined && (!Number.isInteger(v.deposited) || v.deposited < 0||v.deposited>10)))) fail('Invalid lantern');
-  for(const shade of s.shades??[]){if(shade.state!==undefined&&!['spawning','wander','chase','recoil','stunned'].includes(shade.state))fail('Invalid shade state');if(shade.state_ticks_left!==undefined&&(!Number.isSafeInteger(shade.state_ticks_left)||shade.state_ticks_left<0))fail('Invalid shade timer');}
+  for(const l of s.lanterns??[]){if(l.fuel!==undefined&&(!number(l.fuel)||l.fuel<0||l.fuel>100))fail('Invalid fuel');if(l.ever_lit!==undefined&&typeof l.ever_lit!=='boolean')fail('Invalid ever_lit');}
+  for(const shade of s.shades??[]){if(shade.state!==undefined&&!['spawning','wander','chase','recoil','stunned','drain'].includes(shade.state))fail('Invalid shade state');if(shade.state_ticks_left!==undefined&&(!Number.isSafeInteger(shade.state_ticks_left)||shade.state_ticks_left<0))fail('Invalid shade timer');if(shade.target_lantern_id!==undefined&&(typeof shade.target_lantern_id!=='string'||!new RegExp(`^L[1-${night+4}]$`).test(shade.target_lantern_id)))fail('Invalid target_lantern_id');}
   for(const d of s.drifters??[])if(!d||!vector(d.pos)||(d.id!==undefined&&typeof d.id!=='string')||(d.state!==undefined&&!['idle','chase','flee','removed'].includes(d.state))||(d.stolen!==undefined&&(!Number.isInteger(d.stolen)||d.stolen<0))||(d.state_ticks_left!==undefined&&(!Number.isInteger(d.state_ticks_left)||d.state_ticks_left<0)))fail('Invalid drifter');
   for(const c of s.charms??[])if(!c||!['C1','C2'].includes(c.id)||(c.pos!==undefined&&!vector(c.pos))||(c.available!==undefined&&typeof c.available!=='boolean')||(c.respawn_s!==undefined&&(!number(c.respawn_s)||c.respawn_s<0))||(c.respawn_ticks!==undefined&&(!Number.isInteger(c.respawn_ticks)||c.respawn_ticks<0)))fail('Invalid charm');
   for(const list of [s.lanterns,s.drifters,s.charms]){const ids=list?.filter(v=>v.id!==undefined).map(v=>v.id)??[];if(new Set(ids).size!==ids.length)fail('Duplicate entity IDs');}

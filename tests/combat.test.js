@@ -75,7 +75,10 @@ test('pulse inclusive radius, cost, push, score, stun and recovery exactly after
   while (g.tick < 120) step(g, { pulse: true });
   assert.equal(g.player.carried, 3); assert.ok(Math.abs(g.shades[0].pos[0]-9)<1e-9);
   step(g);
-  assert.equal(g.shades[0].state, 'chase');
+  assert.equal(g.shades[0].state, 'wander');
+  assert.ok(Math.abs(g.shades[0].pos[0]-9)<1e-9);
+  step(g);
+  assert.equal(g.shades[0].state,'chase');
   assert.ok(Math.abs(g.shades[0].pos[0] - (9 - 4 / 60)) < 1e-9);
 });
 
