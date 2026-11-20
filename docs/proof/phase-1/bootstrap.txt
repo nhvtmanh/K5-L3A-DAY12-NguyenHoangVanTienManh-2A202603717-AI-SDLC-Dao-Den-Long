@@ -1,0 +1,18 @@
+Verification record — 2026-11-20
+Historical scaffold verification. bootstrap.jsonl reflects the original scaffold, before seeded motes.
+For current collection behavior and reproducible output, see collection.txt and collection-win.jsonl.
+Environment: Windows, Node v24.18.0, npm 11.16.0.
+
+npm test: PASS, 2 tests, 0 failures.
+Coverage: camera-relative movement, diagonal normalization, fixed simulation timing,
+CLI tick 0 and 60, sticky inputs, identical output across repeated runs,
+dawn termination at tick 1, malformed JSON and duplicate input ticks returning 2.
+
+npm run build: PASS, Vite 7.3.8, 7 modules transformed.
+Generated dist/index.html and bundled CSS/JS successfully.
+
+Raw CLI output: bootstrap.jsonl
+Reproduce: node src/headless/cli.js --seed 7 --night 1 --ticks 60 --out docs/proof/phase-1/bootstrap.jsonl
+
+Limits: no browser visual inspection, no clean-clone check, no macOS/Linux execution.
+This verifies the initial scaffold only, not completion of PRD-0 or all Contract tests.

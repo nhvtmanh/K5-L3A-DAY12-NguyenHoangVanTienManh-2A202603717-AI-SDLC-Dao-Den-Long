@@ -1,0 +1,14 @@
+{
+  "browser": "157.0.8103.80",
+  "url": "http://127.0.0.1:4179",
+  "viewport": "1280x800",
+  "passed": [
+    "built game loads WebGL",
+    "mouse drag and keyboard smoke",
+    "idle game reaches loss",
+    "restart resets HUD"
+  ],
+  "lost_message": "Mây đã hết ánh lửa. Nhấn R để thử lại.",
+  "page_errors": [],
+  "limits": "Human confirmation plus mathematical projection tests cover control direction; no automated pointer-lock assertion or browser win run."
+}

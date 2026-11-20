@@ -1,0 +1,23 @@
+Clean source installation verification — 2026-11-20
+Environment: Windows, Node v24.18.0, npm 11.16.0.
+
+Method: copied the 50 tracked/untracked non-ignored source and evidence files to
+.scratch/phase1-clean-install. No .git, node_modules or dist was copied.
+This is a fresh-source installation, NOT a git clone or verification of a published tag.
+Creating the source commit was denied, so the remote still lacks this uncommitted game.
+
+Executed in the fresh directory:
+1. npm ci --offline --no-audit --no-fund --logs-dir .npm-logs: PASS, 17 packages installed.
+   Packages came from the machine npm download cache; no existing node_modules was reused.
+   Warning: npm reports esbuild install script not listed in allowScripts; actual build passed.
+2. npm test: PASS, 19 tests, 0 failures.
+3. npm run build: PASS, Vite 7.3.8, 8 modules transformed.
+4. npm run verify:phase1: PASS, identical deterministic default Night 1 results:
+   win at tick 2931, score 1747, 5 lit lanterns; idle loss at tick 745.
+5. npm run test:browser: PASS in the clean directory, Chrome 157.0.8103.80.
+   WebGL load, mouse/keyboard smoke, idle loss and restart; zero page errors.
+6. SHA256 of package.json/package-lock.json, core, CLI, web main/controls and contract
+   match the current workspace files. git diff --check also passed.
+
+Limit: this does not validate registry availability on a new machine, Linux/macOS execution,
+remote public access or the phase-1 tag. A true clean git clone must follow commit/push.

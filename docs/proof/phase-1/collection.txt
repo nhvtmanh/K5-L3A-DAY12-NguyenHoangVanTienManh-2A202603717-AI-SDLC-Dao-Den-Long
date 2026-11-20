@@ -1,0 +1,28 @@
+Phase 1 — Collection and lantern verification
+Environment: Windows, Node v24.18.0, npm 11.16.0.
+
+Executed npm test: PASS, 9 tests, 0 failures.
+Checks include XZ boundary pickup, capacity, partial deposits, nearest/tied lantern choice,
+interaction rising edge, all five lanterns initially unlit to victory, deterministic seed,
+scenario replacement, tuning consistency, one-time win score, and previous CLI regression checks.
+
+Executed npm run build after core/web changes: PASS, Vite 7.3.8, 7 modules transformed.
+Build output: dist/index.html, CSS 0.77 kB, JS 484.35 kB (gzip 123.00 kB).
+git diff --check: PASS.
+
+Raw output: collection-win.jsonl
+Scenario: tests/fixtures/collection-win.scenario.json
+Inputs: tests/fixtures/collection-win.inputs.json
+Reproduce:
+node src/headless/cli.js --seed 7 --night 1 --ticks 60 --snapshot-every 1 --scenario tests/fixtures/collection-win.scenario.json --inputs tests/fixtures/collection-win.inputs.json --out docs/proof/phase-1/collection-win.jsonl
+
+Observed: snapshot tick 0 has score 0 and 9 carried; at tick 1 the player picks one mote,
+deposits 10, lights L1 and wins. End: ticks 1, won, score 858.
+Score: 10 pickup + 100 lantern + floor(300 - 1/60)*2 + 3*50 = 858.
+CLI fixture output was also compared byte-for-byte across two runs in npm test.
+Four other lanterns are preset lit by this scenario and do not award points.
+Separate automated test starts with all five lanterns unlit and verifies lighting all five.
+
+Limits: no direct browser visual inspection, clean clone or macOS/Linux execution.
+Shades and pulse are not implemented; this is not evidence of complete PRD-0 compliance.
+No phase-1 tag or commit was created by this step.

@@ -1,0 +1,29 @@
+Camera and combat verification
+Environment: Windows, Node v24.18.0, npm 11.16.0.
+
+Executed npm test: PASS, 19 tests, 0 failures.
+Executed npm run build: PASS, Vite 7.3.8, 8 modules transformed.
+Final build JS: 489.65 kB, gzip 124.88 kB. git diff --check: PASS.
+
+Camera regression: actual Three.js PerspectiveCamera projection verifies D is screen-right,
+A is screen-left, W moves forward/up-screen, S backward/down-screen for yaw 0/90/180/-90/37
+and pitch 0.15/0.55/1.2. Mouse yaw direction and pitch clamp also checked.
+This is a geometry test, not a browser pointer-lock or visual check.
+
+Combat checks: 3 deterministic initial shades >=12m from origin; immediate scenario chase;
+2m/s movement; contact damage; multiple shades cannot bypass 120-step invulnerability;
+zero drops; pulse radius inclusive at 5m, cost 3, push 3m, score 5 per target;
+120-step stun, 180-step cooldown, rising-edge input and insufficient resources;
+safe-zone protection including player at its boundary; immediate eviction on lantern lighting.
+Previous collection, score, scenario, deterministic output and CLI error checks still pass.
+
+Raw combat output: combat.jsonl.
+Reproduce:
+node src/headless/cli.js --seed 7 --night 1 --ticks 600 --scenario tests/fixtures/combat.scenario.json --inputs tests/fixtures/combat.inputs.json --out docs/proof/phase-1/combat.jsonl
+
+Observed: pulse tick 1, S1 stunned, score 5; later three hits spaced 120 ticks apart.
+Last hit and game_over at tick 427, result lost, reason no_flames; end score 5.
+The automated CLI test compares two complete output files byte-for-byte.
+
+Limits: browser mouse capture/drag, visual effects, restart interaction, clean clone and
+macOS/Linux execution are not directly verified. No commit, phase tag or push was made.

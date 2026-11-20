@@ -1,4 +1,79 @@
-# Day 12 — AI SDLC: Đảo Đèn Lồng
+# Đảo Đèn Lồng — Phase 1
+
+JavaScript + Three.js + Vite cho bản web; Node.js chạy cùng logic ở chế độ headless.
+Yêu cầu Node.js >=22.12 và npm. Chạy trên Windows, macOS hoặc Linux có Node.js phù hợp.
+
+```sh
+npm ci
+npm run dev
+```
+
+Mở địa chỉ Vite in trong terminal. Bấm vào đảo rồi di chuột để xoay camera, Esc để thả chuột.
+Có thể giữ chuột phải và kéo nếu trình duyệt không cho khóa chuột. WASD di chuyển theo góc nhìn,
+Space nhảy, E nạp đèn, Q tỏa sáng, R hoặc nút Chơi lại để khởi động lại cùng seed.
+Trên PowerShell nếu npm.ps1 bị chặn, dùng npm.cmd thay npm.
+
+Build và chạy bản phát hành thử: `npm run build`, sau đó `npm run preview`.
+Headless không cần trình duyệt hoặc GPU:
+
+```sh
+node src/headless/cli.js --seed 7 --night 1 --ticks 60 --out result.jsonl
+```
+
+Hỗ trợ `--scenario`, `--inputs`, `--snapshot-every` (mặc định 10). Kiểm tra bằng `npm test`.
+
+**Bàn giao Phase 1:** [bảng đối chiếu 5 mục và giới hạn kiểm chứng](docs/phase-1-delivery.md).
+Đã có các cơ chế chính, người dùng xác nhận chạy được và Chrome đã kiểm tra tải game/thua/chơi lại.
+Replay headless Đêm 1 mặc định thắng đủ 5 đèn tại tick 2931, 1747 điểm; cùng đầu vào cho output giống hệt.
+Xem [bằng chứng tổng hợp](docs/proof/phase-1/night1-summary.json).
+Trạng thái clone sạch, Linux, public và tag/push được ghi riêng trong bảng bàn giao, không coi là đã đạt khi chưa xác minh.
+
+### Luật thu thập và tính điểm
+
+100 đom đóm đầu màn, không sinh thêm. Tự nhặt trong 1m (đo XZ), mang tối đa 20.
+Mỗi đèn cần 10; nhấn E trong 2m để chuyển ánh sáng vào đèn chưa sáng gần nhất, có thể nạp nhiều lần.
+Đèn sáng vĩnh viễn, đủ 5 đèn thì thắng. Hết 300 giây thì thua. Chơi lại giữ seed.
+Nhặt được 10 điểm/con; thắp đèn được 100 điểm/đèn.
+Khi thắng cộng thêm floor(giây còn lại)*2 + máu còn lại*50. Dựng scenario không cộng điểm.
+Mặc định bản web dùng seed 7; CLI nhận --seed.
+
+### Bóng Mực và tỏa sáng
+
+3 Bóng Mực đầu màn theo seed, cách gốc ít nhất 12m, không sinh thêm, đuổi với tốc độ 2m/s.
+Chạm trong 0.8m (XZ) mất 1 máu, bất tử 2 giây sau trúng, không rơi đom đóm.
+Hết máu thì thua. Đèn sáng tạo vùng an toàn 4m, đẩy Bóng Mực ra và bảo vệ người chơi trong vùng.
+Q tốn 3 ánh sáng, tác động trong 5m, đẩy 3m và choáng 2 giây; hồi chiêu 3 giây.
+Mỗi Bóng Mực trúng pulse cho 5 điểm; pulse không trúng con nào vẫn tốn ánh sáng.
+Giữ Q hoặc E không lặp hành động: cần nhả rồi nhấn lại.
+
+Thứ tự một bước: di chuyển/nhảy, nhặt, nạp đèn, pulse, Bóng Mực di chuyển/bị đẩy khỏi đèn,
+sát thương, xét kết thúc. Hết máu ưu tiên trước đủ đèn, rồi mới hết giờ.
+Ban đầu thực thể có sẵn ở tick 0; không sinh bổ sung. Snapshot theo chu kỳ, luôn có dòng end.
+
+Kiểm chứng nhặt/nạp/thắng có thể chạy lại bằng:
+
+```sh
+node src/headless/cli.js --seed 7 --night 1 --ticks 60 --snapshot-every 1 --scenario tests/fixtures/collection-win.scenario.json --inputs tests/fixtures/collection-win.inputs.json --out result.jsonl
+```
+
+Kịch bản này đặt sẵn 4 đèn sáng, 9 ánh sáng và 1 đom đóm trong tầm. Kết thúc tick 1, thắng với 858 điểm.
+Bằng chứng: [docs/proof/phase-1/collection.txt](docs/proof/phase-1/collection.txt).
+Giả định: [docs/notes/assumptions.md](docs/notes/assumptions.md).
+Nhật ký AI: [docs/notes/ai-log.md](docs/notes/ai-log.md).
+Đánh giá AI/harness: [docs/notes/phase-1-review.md](docs/notes/phase-1-review.md).
+
+Kiểm chứng toàn màn mặc định: `npm run verify:phase1`.
+Kiểm tra Chrome và tạo ảnh bằng chứng: `npm run build`, rồi `npm run test:browser` (cần Chrome cài sẵn).
+Không cần Playwright hoặc Chrome cho headless CLI; chỉ cần Node.js.
+Mã game giữ bản quyền, cho phép xem/chạy/chấm bài theo [LICENSE](LICENSE); nguồn và thư viện ở [CREDITS.md](CREDITS.md).
+
+## Sáng tạo của tôi
+
+Chưa thêm cơ chế sáng tạo ngoài PRD. Đồ họa ban đầu dựng từ khối hình học bằng code.
+
+---
+
+# Tài liệu lab: Day 12 — AI SDLC: Đảo Đèn Lồng
 
 > **Cá nhân** (1 người / 1 MSSV) · Áp dụng SDLC cùng AI để xây một **game 3D** qua **4 phase**, từ yêu cầu ban đầu tới bản phát hành.
 > **Lab board + trợ giảng:** **[Đảo Đèn Lồng Lab](https://claude.ai/artifact/Q1RYyv1dxjUczzCbd2ZnoW)**
