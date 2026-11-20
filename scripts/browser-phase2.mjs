@@ -2,7 +2,8 @@ import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
 import { mkdirSync,writeFileSync,readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
-const url='http://127.0.0.1:4179',phase3=JSON.parse(readFileSync('game.contract.json','utf8')).contract_version==='1.2',folder=phase3?'docs/proof/phase-3':'docs/proof/phase-2';mkdirSync(folder,{recursive:true});
+const version=JSON.parse(readFileSync('game.contract.json','utf8')).contract_version;
+const url='http://127.0.0.1:4179',phase3=['1.2','1.3'].includes(version),folder=version==='1.3'?'docs/proof/phase-4':phase3?'docs/proof/phase-3':'docs/proof/phase-2';mkdirSync(folder,{recursive:true});
 const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4179','--strictPort'],{stdio:['ignore','pipe','pipe']});
 let logs='',browser;server.stdout.on('data',d=>logs+=d);server.stderr.on('data',d=>logs+=d);
 try{

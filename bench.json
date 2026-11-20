@@ -1,0 +1,12 @@
+{
+  "contract_version": "1.3",
+  "avg_fps": 120.21154564371894,
+  "p1_low_fps": 107.43321718745541,
+  "frame_ms_p95": 8.899999998509884,
+  "frames": 3605,
+  "load_ms": 1373.415771484375,
+  "peak_mem_mb": null,
+  "vsync_off": false,
+  "renderer": "Three.js r180; ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "os": "Windows_NT 10.0.22631 x64"
+}

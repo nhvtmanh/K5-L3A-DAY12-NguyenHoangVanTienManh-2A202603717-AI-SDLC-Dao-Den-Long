@@ -45,4 +45,13 @@ Người dùng đã đồng ý toàn bộ 15 giả định và ba cách xử lý
 Ba cách hiểu đã được người dùng duyệt nhưng chưa được trợ giảng xác nhận: ưu tiên kết thúc,
 không thêm snapshot cuối ngoài chu kỳ, làm tròn xuống giây thưởng. Hiện triển khai theo giả định đã duyệt.
 
-Chưa hoàn tất Phase 1, chưa tạo tag phase-1.
+Ghi chú lịch sử khi lập giả định Phase 1: lúc đó chưa hoàn tất và chưa tạo tag phase-1.
+Trạng thái hiện hành xem các tệp bàn giao theo phase; tag phase-1/2/3 hiện đã có.
+
+## Phase 4 — các quyết định được duyệt
+
+- Node server dùng file JSON cục bộ chung giữa giao diện và CLI export; không commit điểm cá nhân.
+- Soak i=0…9 tương ứng seed7…16; RSS cuối sau reset sang Đêm sẵn sàng, không ép GC.
+- Benchmark dùng wander bình thường tới đèn tắt nhưng không chase/drain để giữ 200 wander. p95 nearest-rank. Chrome có cửa sổ1280×720, warmup3s/đo30s; vsync false và RSS renderer null do giới hạn web.
+- Video: sau khi ban đầu đồng ý tự động, tác giả đổi sang tự quay; chưa tạo MP4. Commit/tag/push/Release tác giả tự làm.
+- Token/chi phí: tác giả xác nhận chưa có số liệu; không tự tạo ước lượng. Chi tiết triển khai/kiểm chứng: docs/phase-4-spec.md và docs/phase-4-delivery.md.

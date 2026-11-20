@@ -12,3 +12,5 @@
 - Dependency bắc cầu và thông báo kèm theo: `package-lock.json` và `THIRD_PARTY_NOTICES.txt`.
 
 Mã game gốc giữ bản quyền, chỉ cho xem/chạy/chấm bài theo `LICENSE`, đúng lựa chọn của người dùng.
+
+Phase 4: hình học procedural được gom bằng Three.js InstancedMesh; không thêm asset, font hay mẫu âm thanh ngoài. Ảnh README/bằng chứng là ảnh chụp game chạy thật bằng Playwright. Công cụ đóng ZIP dùng Node zlib/crypto, không thêm thư viện đóng gói. Video demo do tác giả tự quay và bổ sung, chưa có trong phiên triển khai. Node server/bảng điểm dùng thư viện chuẩn Node.js. Các thư viện giữ giấy phép riêng nêu trên; gói ZIP có LICENSE, CREDITS và THIRD_PARTY_NOTICES.

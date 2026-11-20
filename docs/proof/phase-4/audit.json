@@ -1,0 +1,30 @@
+{
+  "contract_version": "1.3",
+  "passed": [
+    "Phase 3 tuning preserved",
+    "required contract commands present",
+    "benchmark raw samples reproduce metrics",
+    "canonical benchmark scene and thresholds on reference machine",
+    "10-night soak crash/RSS thresholds",
+    "required documents and four-phase changelog",
+    "clean source install evidence",
+    "browser and package evidence",
+    "ZIP SHA-256 matches"
+  ],
+  "artifact": {
+    "file": "release/dao-den-long-v1.0.0.zip",
+    "sha256": "d4c6260a22e525692a2b70edb06d9c9c6ad3491f1ccb061234c2b4b6efe17fc6"
+  },
+  "pending": [
+    "Author records MP4 under 5 minutes and attaches to Release or commits docs/demo/demo.mp4; replace README video placeholder.",
+    "Author reviews and commits, creates and pushes phase-4 tag.",
+    "Author creates/pushes v1.0.0 and publishes GitHub Release with ZIP/checksum/video.",
+    "After publishing, verify public access and clone the tagged commit to check the three README commands."
+  ],
+  "limitations": [
+    "Reference-machine metrics do not replace grading-machine measurements.",
+    "Private instructor tests are unavailable.",
+    "Public repository/Release visibility must be checked after publishing.",
+    "AI token/cost statistics unavailable, confirmed by author."
+  ]
+}

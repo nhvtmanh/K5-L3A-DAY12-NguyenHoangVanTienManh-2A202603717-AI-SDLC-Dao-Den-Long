@@ -1,0 +1,17 @@
+{
+  "browser": "157.0.8103.80",
+  "viewport": "1280x720",
+  "passed": [
+    "binding save/reload",
+    "duplicate key rejected",
+    "restore default keys",
+    "reduced motion persisted and hit flash disabled",
+    "UI text18px and large22.5px",
+    "spawn caption and directional marker",
+    "real gameplay loss score form",
+    "leaderboard persists reload",
+    "CLI exports same on-disk entries"
+  ],
+  "page_errors": [],
+  "leaderboard_test_data": "Browser_4 is automated test gameplay, isolated data directory; not user leaderboard"
+}

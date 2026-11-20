@@ -86,3 +86,18 @@
   màu thực tế, chờ frame renderer hoàn tất thay vì chỉ chờ flagsetting; không bỏ assertion để test qua.
 - Quyền chạy commit/tag/push Phase3 bị từ chối trước khi lệnh thực thi. HEAD vẫn phase-2,
   chưa có tagphase-3; giữ toàn bộ thay đổi và proof ở workspace, không thử cách khác để ghi Git.
+
+## Phase 4 — Ticket-04 / Contract 1.3
+
+- Khi bắt đầu Phase 4, tác giả đã tự commit/tag Phase 3 tại a8f6ce9. Giữ nguyên file riêng `d`, mọi proof cũ và quyền tác giả tự commit/tag/push/Release.
+- Lập docs/phase-4-spec.md trước code. Hỏi và được duyệt server Node+JSON chung cho UI/CLI; soak seed i=0…9, reset cuối không GC; wander benchmark không chase/drain; p95 nearest-rank; Chrome có cửa sổ, web vsync false/RSS null.
+- Ban đầu đồng ý demo tự động, sau đó tác giả yêu cầu tự quay: dừng hướng tạo clip, chỉ cung cấp docs/demo/README.md; không có MP4 và không nhận video đã hoàn thành.
+- Thêm server/API/file atomic top10, export cùng store, settings 9 phím/cảnh báo/chữ lớn/giảm chuyển động. Không dùng localStorage làm bảng điểm riêng. Settings vẫn lưu localStorage.
+- Tách thống kê frame thuần, runner headed Chrome, cảnh chuẩn và instancing renderer dùng chung. Rà soát phát hiện chiều camera benchmark ngược với yêu cầu nhìn từ trên xuống; sửa dấu Z theo quay +Y và thêm assertion cross-product, build/đo lại thật.
+- Kết quả cuối bench seed42 duration30: 3605 frame, avg120.2115, p1low107.4332, p95 khoảng8.9ms, load1373.4ms; dt và CPU/GPU/RAM/browser nằm trong metadata. Máy Windows Balanced, Ryzen5 5600H/Radeon; số cá nhân, chưa phải máy chấm.
+- Soak lần đầu không đạt RSS, giữ report soak-initial.json; dùng VM jitless/heap nhỏ công khai trong soak_cmd, không ép GC/warmup tăng baseline. Lần đạt seed7/10Đêm:0crash, RSS40.785→44.777MiB,4.174s. Kết quả toàn lost do input ngẫu nhiên; không giả làm bot thắng.
+- Bộ 43 test cũ còn hiệu lực vẫn đạt; thêm8 test (metrics/cảnh bench/board/API/keybindings/soak/cues), tổng51 không skip. Chạy lại verifier Phase1/2/3, ghi dưới proof/phase-4 để không ghi đè lịch sử.
+- Browser thực kiểm tra font18/22.5px, trùng phím/reset/lưu, caption+arrow và một lượt thua thực để lưu Browser_4 trong store biệt lập; reload+CLI export cùng file. Không đưa điểm test vào data người dùng.
+- Đóng ZIP bằng thư viện chuẩn Node; kiểm CRC/giải nén thư mục mới/server/WebGL/API không npm install. Cài source vào thư mục mới không node_modules/dist, npm ci từ cache, build/test/start và browser đạt; đây là bản sao source chưa commit, không nhận là git clone của release.
+- Làm sạch README3lệnh, giữ README lịch sử, bổ sung changelog4phase/credits/retro/release notes/lệnh thủ công. LICENSE giữ bản quyền đúng lựa chọn đã chốt.
+- Tác giả xác nhận **chưa có số liệu token/chi phí**. Retro ghi đúng điều này; không tự suy ra thống kê. Không thêm asset hoặc công cụ AI tạo nội dung mới.

@@ -1,0 +1,12 @@
+import {mkdirSync,cpSync,writeFileSync,readFileSync,rmSync} from 'node:fs';
+import {resolve,sep} from 'node:path';
+import {createHash} from 'node:crypto';
+import {zipDirectory} from './zip.mjs';
+const release=resolve('release'),stage=resolve(release,'staging','dao-den-long-v1.0.0');
+if(!stage.startsWith(release+sep))throw new Error('Unsafe package path');
+rmSync(stage,{recursive:true,force:true});mkdirSync(stage,{recursive:true});
+for(const path of ['dist','src/server','scripts/run.mjs','LICENSE','CREDITS.md','THIRD_PARTY_NOTICES.txt'])cpSync(path,resolve(stage,path),{recursive:true});
+writeFileSync(resolve(stage,'package.json'),JSON.stringify({name:'dao-den-long-release',version:'1.0.0',private:true,type:'module',engines:{node:'>=22.12'},scripts:{start:'node scripts/run.mjs'}},null,2)+'\n');
+writeFileSync(resolve(stage,'README.txt'),`DAO DEN LONG v1.0.0\n\nRequire Node.js >=22.12 and a WebGL2 browser (Chrome/Edge recommended).\nOpen a terminal inside this extracted directory and run:\n\n  node scripts/run.mjs\n\nOpen the printed http://127.0.0.1:4173 URL. No npm install is required for this prebuilt package.\nWASD move, mouse camera, Space jump, Shift dash, E interact/refuel, Q pulse, P pause.\nSettings include key rebinding, reduced motion, large UI text and alternate colors.\nEscape releases the mouse and pauses when locked.\n\nScores persist in data/leaderboard.json. Export the same file with:\n  node scripts/run.mjs --export-leaderboard leaderboard.json\n\nUse --port 4180 if the default port is occupied. Keep the data directory between launches.\nTests/headless/bench/soak and the complete source are in the GitHub repository.\nLicense: original code is reserved for viewing and grading; third-party notices included.\n`);
+const archive=resolve(release,'dao-den-long-v1.0.0.zip'),count=zipDirectory(stage,archive),bytes=readFileSync(archive),sha256=createHash('sha256').update(bytes).digest('hex');
+writeFileSync(`${archive}.sha256`,`${sha256}  dao-den-long-v1.0.0.zip\n`);console.log(JSON.stringify({archive,files:count,bytes:bytes.length,sha256},null,2));

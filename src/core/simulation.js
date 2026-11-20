@@ -63,7 +63,7 @@ export function step(g,input={}){
   g.sim_tick++;
   if(g.dashLeft===1)g.player.vel[1]=g.dashVertical??0;
   for(const key of ['invuln','dashCd','pulseCd','charm','dashLeft'])g[key]=Math.max(0,g[key]-1);
-  updateFuel(g,emit);
+  if(!g.benchmark)updateFuel(g,emit);
   for(const s of g.shades)s.left=Math.max(0,s.left-1);
   for(const d of g.drifters)if(d.state==='flee'){d.left--;if(d.left<=0)d.state='removed';}
   g.drifters=g.drifters.filter(d=>d.state!=='removed');
@@ -80,7 +80,7 @@ export function step(g,input={}){
   const move=[(mx*Math.cos(yaw)+mz*Math.sin(yaw))/norm,(-mx*Math.sin(yaw)+mz*Math.cos(yaw))/norm];
   const heading=g.dashLeft?g.dashDir:(g.launch??move);
   if(Math.hypot(...heading)>0)g.facing=direction([0,0,0],[heading[0],0,heading[1]]);
-  if(!g.respawn&&!respawned&&!g.falling){
+  if(!g.respawn&&!respawned&&!g.falling&&!g.benchmark){
     if(jump&&p.grounded){p.vel[1]=7;p.grounded=false;}
     if(dash&&!g.dashLeft&&(g.dashCd===0||g.charm>0)){g.dashDir=[...g.facing];g.dashVertical=p.vel[1];g.dashLeft=12;g.dashCd=g.charm?0:90;emit('dash');}
     let vx=move[0]*(g.charm?7.2:6),vz=move[1]*(g.charm?7.2:6);
@@ -103,7 +103,7 @@ export function step(g,input={}){
       const dir=direction(pad.pos,pad.target);g.launch=[dir[0]*pad.speed,dir[1]*pad.speed];p.vel=[g.launch[0],pad.vy,g.launch[1]];p.grounded=false;break;}
     if(p.pos[1]<-10){const lost=p.carried;p.carried=0;p.flames=Math.max(0,p.flames-1);g.respawn=p.flames?60:0;g.falling=true;p.vel=[0,0,0];g.launch=null;g.dashLeft=0;emit('player_hit',{by:'fall',flames:p.flames,dropped:0,lost});}
   }
-  const canAct=!g.respawn&&!g.falling;
+  const canAct=!g.respawn&&!g.falling&&!g.benchmark;
   if(canAct){
     g.motes=g.motes.filter(m=>{if(m.born===g.sim_tick||p.carried>=capacity(g)||xz(p.pos,m.pos)>1||Math.abs(p.pos[1]-m.pos[1])>1.5)return true;p.carried++;emit('mote_picked',{carried:p.carried});return false;});
     for(const c of g.charms)if(c.available&&xz(p.pos,c.pos)<=1&&Math.abs(p.pos[1]-c.pos[1])<=1.5){c.available=false;c.respawn=2700;g.charm=600;g.dashCd=0;emit('charm_picked',{charm_id:c.id,charm_ticks:600});}
@@ -131,6 +131,12 @@ export function step(g,input={}){
     emit('pulse',{stunned_ids:ids});
   }
   for(const s of g.shades){
+    if(g.benchmark){
+      s.state='wander';if(s.protected)continue;
+      const target=g.lanterns.filter(l=>!l.lit).sort((a,b)=>xz(s.pos,a.pos)-xz(s.pos,b.pos)||a.id.localeCompare(b.id))[0];
+      if(target)walkShade(g,s,direction(s.pos,target.pos),Math.min(xz(s.pos,target.pos),2/60));
+      continue;
+    }
     if(s.state==='stunned'&&s.left===0){s.state='wander';s.target_lantern_id=null;s.recoveredTick=g.sim_tick;continue;}
     if(s.protected)continue;
     if(s.state==='stunned'&&s.left>0){if(s.pushLeft>0){walkShade(g,s,s.pushDir??[1,0],4/15);s.pushLeft--;}continue;}
@@ -173,7 +179,7 @@ export function step(g,input={}){
   if(g.randomMotes&&g.sim_tick%240===0&&g.motes.filter(m=>m.kind==='random').length<30){const empty=g.map.motePoints.filter(point=>!g.motes.some(m=>xz(m.pos,point)<1e-6&&Math.abs(m.pos[1]-point[1])<1e-6));if(empty.length)addMote(g,empty[Math.floor(g.random()*empty.length)]);}
   if(g.randomShades&&g.sim_tick>=300&&(g.sim_tick-300)%g.map.shadeInterval===0){spawnShade(g,emit);if(g.sim_tick===300)spawnShade(g,emit);}
   if(g.night>1&&g.randomDrifters&&g.sim_tick%1200===0&&g.drifters.length<2){const point=g.map.shadePoints[Math.floor(g.random()*g.map.shadePoints.length)];g.drifters.push({id:`D${g.nextDrifter++}`,pos:[point[0],point[1]+.8,point[2]],state:'idle',stolen:0,left:0,dir:[1,0]});}
-  finishAtDawn(g,emit);return events;
+  if(!g.benchmark)finishAtDawn(g,emit);return events;
 }
 export function snapshot(g){const p=g.player;return {type:'snapshot',tick:g.tick,sim_tick:g.sim_tick,night:g.night,state:g.state,time_left_s:Math.max(0,g.duration-g.sim_tick/60),score:g.score,wind:{...g.wind},
   player:{pos:p.pos.map(round),vel:p.vel.map(round),grounded:p.grounded,flames:p.flames,carried:p.carried,capacity:capacity(g),invuln:g.invuln>0,dash_cd_s:g.dashCd/60,pulse_cd_s:g.pulseCd/60,charm_s:g.charm/60},

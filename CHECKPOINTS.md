@@ -110,14 +110,18 @@ Tự kiểm:
 **Mục tiêu:** đưa sản phẩm đến mức phát hành được, đo được, cài đặt dễ.
 
 Gợi ý:
-- [ ] Đọc các yêu cầu có **số đo cụ thể** trong ticket. Với mỗi yêu cầu đo, chạy thật và lưu kết quả cùng cấu hình máy.
-- [ ] Làm sạch README: người khác clone sạch, làm theo, chạy được trong tối đa 3 lệnh.
-- [ ] Đảm bảo file bản quyền, ghi nguồn asset, giấy phép.
+- [x] Đọc các yêu cầu có **số đo cụ thể** trong ticket. Với mỗi yêu cầu đo, chạy thật và lưu kết quả cùng cấu hình máy.
+- [x] Làm sạch README: người khác clone sạch, làm theo, chạy được trong tối đa 3 lệnh.
+- [x] Đảm bảo file bản quyền, ghi nguồn asset, giấy phép.
 - [ ] Tạo bản phát hành chạy được (file thực thi, thư mục web tĩnh hoặc Docker) và GitHub Release `v1.0.0`.
 
 Tự kiểm:
-- [ ] Thử trên một thư mục sạch hoặc máy khác, không dùng cấu hình sẵn của bạn.
+- [x] Thử trên một thư mục sạch hoặc máy khác, không dùng cấu hình sẵn của bạn.
 - [ ] Đã gắn tag `phase-4` và tạo Release `v1.0.0`.
+
+Trạng thái triển khai: [bàn giao Phase 4](docs/phase-4-delivery.md). Có ZIP chạy được,
+benchmark/soak thật và kiểm tra cài mới. Video tác giả tự quay; tag/Release chưa thực hiện.
+Thử thư mục sạch dùng bản sao source chưa commit, chưa phải clone commit phát hành.
 
 ---
 
@@ -125,7 +129,7 @@ Tự kiểm:
 
 **Mục tiêu:** hoàn tất ghi chép, quay video, kiểm tra lần cuối, nộp.
 
-- [ ] **Retro ngắn:** điều gì hiệu quả hoặc không khi làm với AI; những lần AI sai và cách bạn phát hiện; harness nào giúp nhiều nhất; token/chi phí ước tính và cách bạn tiết kiệm; nếu làm lại thì đổi gì.
+- [x] **Retro ngắn:** điều gì hiệu quả hoặc không khi làm với AI; những lần AI sai và cách bạn phát hiện; harness nào giúp nhiều nhất; token/chi phí ước tính và cách bạn tiết kiệm; nếu làm lại thì đổi gì. Xem `docs/retro.md`; tác giả xác nhận chưa có số liệu token/chi phí, đã ghi rõ.
 - [ ] **Video demo `.mp4` dưới 5 phút**: chơi thử và cho thấy bằng chứng game chạy đúng. Đính kèm Release `v1.0.0` hoặc commit vào `docs/demo/demo.mp4` (dưới 100 MB). Đặt link ở đầu README.
 - [ ] Rà soát repo: không có `.env`, API key, token. Lịch sử git còn đủ file harness.
 - [ ] Rà soát bằng danh sách ở [SUBMISSION.md](SUBMISSION.md) mục "Checklist trước khi nộp".

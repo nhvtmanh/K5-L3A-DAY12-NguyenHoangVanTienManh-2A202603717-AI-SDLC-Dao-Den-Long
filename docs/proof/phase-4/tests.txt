@@ -1,0 +1,63 @@
+
+> dao-den-long@1.0.0 test
+> node --test
+
+✔ pickup is inclusive in XZ, capacity leaves excess motes, scenario grants no score (3.8719ms)
+✔ partial deposits, nearest receiving lantern, inclusive radius, rising edges and refuel (10.9003ms)
+✔ seeded initial distribution and scenario overrides (2.5969ms)
+✔ contract tuning matches implemented mechanics (1.4179ms)
+✔ five first ignitions with finite motes grow capacity but do not end the night (3.7074ms)
+✔ terminal precedence and win reward applied only once (0.5038ms)
+✔ CLI collection-to-win fixture has exact events, snapshots and deterministic output (157.9424ms)
+✔ two seeded shades spawn at tick 300 beyond 15m; scenario replaces and disables spawning (12.1786ms)
+✔ CLI combat fixture is deterministic, contains stunned snapshots, and ends with no_flames (173.5841ms)
+✔ contact loses one flame; simultaneous shades respect 90 ticks of invulnerability and drop half (13.3605ms)
+✔ hit radius is inclusive and measured in XZ after the shade movement (0.3302ms)
+✔ pulse inclusive radius, cost, push, score, stun and recovery exactly after 120 ticks (2.0169ms)
+✔ pulse needs resources and a rising edge; cooldown permits the next pulse at tick 181 (1.7761ms)
+✔ pulse before shade contact prevents damage, including zero-distance push (0.4524ms)
+✔ lit lantern repels shades within 30 ticks; unlit lantern does not (3.9542ms)
+✔ WASD projects to the correct screen direction across camera yaw and pitch (10.3447ms)
+✔ mouse turns right without changing contract yaw convention; pitch stays bounded (0.3386ms)
+✔ camera rotation, normalization, and fixed-step movement (6.7947ms)
+✔ CLI tick boundaries, sticky input, determinism, dawn and invalid JSON (364.9111ms)
+✔ phase2 scenarios exercise each new headless mechanic (59.6684ms)
+✔ every phase2 fixture runs via CLI1.1 and is deterministic (1520.3646ms)
+✔ standard maps, elevated surfaces, bridge and vertical walls (0.3144ms)
+✔ jump edges, full air control and dash cooldown without invulnerability (0.722ms)
+✔ charm lasts 600 ticks, refreshes, respawns after 2700 and pause freezes clocks (10.8674ms)
+✔ fall death does not respawn; dropped motes expire; drifter flee removes itself (4.3532ms)
+✔ campaign sums won nights, retries same night and reaches Dawn after night3 (1.3326ms)
+✔ newly spawned mote waits until the following tick and random cap counts active motes (6.1884ms)
+✔ pulse uses 3D center, refreshes stun and push, and vertical hit threshold is enforced (0.7666ms)
+✔ drifter steals before shade hit, independent of safe-zone and player invulnerability (0.5761ms)
+✔ CLI1.1 rejects invalid new fields with exit2 (362.0638ms)
+✔ scenario drifter IDs do not collide with generated IDs (5.6319ms)
+✔ integer fuel decay, expiry once and pause freeze (7.4069ms)
+✔ refuel ceil, clamp, points; completely full lantern receives nothing (1.4112ms)
+✔ relight cost5, bonus40, dynamic capacity includes relights but excludes presets (0.8639ms)
+✔ drain stacks with decay; events use global sim_tick60 and pause freezes them (12.7116ms)
+✔ weak target chosen only by wander; chase remains chase and target tie picks smaller ID (0.9572ms)
+✔ safe boundary is exact30; restoration expels drain shade and prevents damage (0.909ms)
+✔ drain exits on player6m, target extinction or distance; stun recovers to wander for one step (1.4216ms)
+✔ pulse gives total15 for a draining shade,5 otherwise, with ordinary stun/push (0.7421ms)
+✔ all-lit no longer ends early; dawn thresholds3/5,4/6,5/7 and fuel/flame bonus (1.6238ms)
+✔ last-tick out/refuel/hit are applied before dawn; death always wins precedence (1.4815ms)
+✔ lantern silhouette, tear,1Hz blink and alternate accent independent of colors (0.3461ms)
+✔ v1.2 scenarios validate new fields and deterministic snapshots/events (1759.8666ms)
+✔ benchmark statistics use exact N/sum, slowest ceil1percent and nearest-rank95 (1.5067ms)
+✔ benchmark exact200wander/100motes; player, fuel, pickup, damage, spawns and end frozen (665.3417ms)
+✔ leaderboard validates names, stores five fields, sorts top10, and preserves earliest ties (114.9743ms)
+✔ invalid local leaderboard is not silently overwritten (2.661ms)
+✔ local leaderboard API persists POST, reloads GET, rejects invalid submission (47.4853ms)
+✔ all nine remappable actions reject duplicates, persistable bindings and restore defaults (0.9395ms)
+✔ soak uses one child process for sequential seeded nights and emits real memory metrics (771.3192ms)
+✔ visual accessibility cues cover shade spawn, wind lead, last10seconds and weak fuel (0.8931ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2139.4351

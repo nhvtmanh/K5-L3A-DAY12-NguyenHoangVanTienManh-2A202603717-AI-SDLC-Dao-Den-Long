@@ -1,0 +1,13 @@
+{
+  "archive": "release/dao-den-long-v1.0.0.zip",
+  "files": 11,
+  "requires_npm_install": false,
+  "passed": [
+    "ZIP CRC validation",
+    "clean extraction",
+    "Node-only server from extracted package",
+    "WebGL game loads",
+    "leaderboard API available"
+  ],
+  "page_errors": []
+}

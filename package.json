@@ -1,6 +1,6 @@
 {
   "name": "dao-den-long",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -10,12 +10,17 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
+    "start": "node scripts/run.mjs",
     "headless": "node src/headless/cli.js",
     "test": "node --test",
     "verify:phase1": "node scripts/verify-phase1.mjs",
-    "test:browser": "node scripts/browser-phase2.mjs",
+    "test:browser": "node scripts/browser-phase4.mjs",
     "verify:phase2": "node scripts/verify-phase2.mjs",
-    "verify:phase3": "node scripts/verify-phase3.mjs"
+    "verify:phase3": "node scripts/verify-phase3.mjs",
+    "bench": "node scripts/bench.mjs",
+    "soak": "node --jitless --max-semi-space-size=1 --max-old-space-size=32 scripts/soak.mjs",
+    "package:release": "node scripts/package-release.mjs",
+    "test:package": "node scripts/package-check.mjs"
   },
   "dependencies": {
     "three": "^0.180.0"

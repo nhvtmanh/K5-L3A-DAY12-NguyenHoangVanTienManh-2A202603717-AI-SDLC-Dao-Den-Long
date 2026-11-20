@@ -1,0 +1,15 @@
+{
+  "method": "Copy git-listed current source into a new directory, no pre-existing node_modules/dist; npm ci uses npm cache only, no dependency directory reuse. This is not a committed Git clone.",
+  "source_files": 165,
+  "node": "v24.18.0",
+  "browser": "157.0.8103.80",
+  "checks": [
+    "ci --offline --no-audit --no-fund",
+    "run build",
+    "test",
+    "production server from freshly installed and built source",
+    "WebGL gameplay advances",
+    "no browser errors"
+  ],
+  "passed": true
+}

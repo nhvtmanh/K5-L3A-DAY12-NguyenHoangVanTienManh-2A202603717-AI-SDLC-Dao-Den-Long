@@ -1,0 +1,32 @@
+import {chromium} from 'playwright';
+import {spawn,spawnSync} from 'node:child_process';
+import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync} from 'node:fs';
+import {join} from 'node:path';
+import assert from 'node:assert/strict';
+const folder='docs/proof/phase-4';mkdirSync(folder,{recursive:true});mkdirSync('.scratch',{recursive:true});const dataDir=mkdtempSync('.scratch/browser4-');
+let browser,server;
+try{
+ server=spawn(process.execPath,['scripts/run.mjs','--port','0','--data-dir',dataDir],{stdio:['ignore','pipe','pipe']});let log='';server.stderr.on('data',d=>log+=d);
+ const url=await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error(log||'Server start timeout')),10000);server.stdout.on('data',d=>{const m=String(d).match(/Local: (http:\/\/127\.0\.0\.1:\d+)/);if(m){clearTimeout(t);resolve(m[1]);}});server.on('exit',c=>{clearTimeout(t);reject(new Error(`Server exited ${c}: ${log}`));});});
+ browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL??'chrome',headless:true,args:['--enable-gpu','--ignore-gpu-blocklist']});const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(url);await page.getByRole('button',{name:'Cài đặt',exact:true}).click();
+ await page.getByRole('button',{name:'Nhảy: Space',exact:true}).click();await page.keyboard.press('KeyJ');assert.equal((await page.evaluate(()=>window.__gameDiagnostics())).settings.bindings.jump,'KeyJ');
+ await page.getByRole('button',{name:'Nhảy: J',exact:true}).click();await page.keyboard.press('KeyW');assert.ok((await page.locator('#key-warning').textContent()).includes('đã dùng'));assert.equal((await page.evaluate(()=>window.__gameDiagnostics())).settings.bindings.jump,'KeyJ');
+ await page.getByRole('checkbox',{name:'Giảm chuyển động',exact:true}).check();await page.getByRole('checkbox',{name:'Chữ lớn (×1.25)',exact:true}).check();
+ await page.reload();await page.getByRole('button',{name:'Cài đặt',exact:true}).click();assert.equal((await page.evaluate(()=>window.__gameDiagnostics())).settings.bindings.jump,'KeyJ');assert.equal(await page.getByRole('checkbox',{name:'Giảm chuyển động',exact:true}).isChecked(),true);assert.equal(await page.getByRole('checkbox',{name:'Chữ lớn (×1.25)',exact:true}).isChecked(),true);assert.equal(await page.evaluate(()=>parseFloat(getComputedStyle(document.documentElement).fontSize)),22.5);
+ const fontFailures=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>!e.children.length&&e.textContent.trim()&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&parseFloat(getComputedStyle(e).fontSize)<22.5).map(e=>[e.id,e.tagName,getComputedStyle(e).fontSize]));assert.deepEqual(fontFailures,[]);
+ await page.screenshot({path:`${folder}/accessibility-settings.png`});
+ await page.getByRole('button',{name:'Khôi phục mặc định',exact:true}).click();assert.equal((await page.evaluate(()=>window.__gameDiagnostics())).settings.bindings.jump,'Space');await page.getByRole('checkbox',{name:'Chữ lớn (×1.25)',exact:true}).uncheck();await page.getByRole('button',{name:'Quay lại',exact:true}).click();
+ await page.getByRole('button',{name:'Bắt đầu',exact:true}).click();await page.getByRole('button',{name:'Vào Đêm',exact:true}).click();await page.waitForFunction(()=>window.__gameDiagnostics().sim_tick>=305);
+ assert.ok((await page.locator('#captions').textContent()).includes('Bóng Mực'));assert.ok(await page.locator('.spawn-marker').count()>=1);await page.screenshot({path:`${folder}/spawn-warning.png`});
+ const normalFonts=await page.evaluate(()=>[...document.querySelectorAll('#hud *')].filter(e=>!e.children.length&&e.textContent.trim()&&e.getClientRects().length&&parseFloat(getComputedStyle(e).fontSize)<18).map(e=>e.id));assert.deepEqual(normalFonts,[]);
+ await page.keyboard.down('KeyW');for(let i=0;i<25;i++){if((await page.evaluate(()=>window.__gameDiagnostics())).screen==='result')break;await page.keyboard.press('Shift');await page.waitForTimeout(1600);}await page.keyboard.up('KeyW');await page.waitForFunction(()=>window.__gameDiagnostics().screen==='result',null,{timeout:15000});
+ assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('hit')),false);
+ await page.locator('#player-name').fill('Browser_4');await page.getByRole('button',{name:'Lưu điểm',exact:true}).click();await page.getByText('Đã lưu điểm của lượt chơi này.',{exact:true}).waitFor();
+ await page.getByRole('button',{name:'Bảng xếp hạng',exact:true}).click();await page.getByRole('cell',{name:'Browser_4',exact:true}).waitFor();await page.screenshot({path:`${folder}/leaderboard.png`});
+ await page.reload();await page.getByRole('button',{name:'Bảng xếp hạng',exact:true}).click();await page.getByRole('cell',{name:'Browser_4',exact:true}).waitFor();
+ const out=join(dataDir,'export.json'),exported=spawnSync(process.execPath,['scripts/run.mjs','--data-dir',dataDir,'--export-leaderboard',out],{encoding:'utf8'});assert.equal(exported.status,0,exported.stderr);const entries=JSON.parse(readFileSync(out,'utf8'));assert.equal(entries.entries[0].name,'Browser_4');assert.equal(entries.entries[0].score,0);assert.equal(entries.entries[0].nights_won,0);
+ writeFileSync(`${folder}/leaderboard-export.json`,JSON.stringify(entries,null,2)+'\n');assert.deepEqual(errors,[]);
+ const report={browser:await browser.version(),viewport:'1280x720',passed:['binding save/reload','duplicate key rejected','restore default keys','reduced motion persisted and hit flash disabled','UI text18px and large22.5px','spawn caption and directional marker','real gameplay loss score form','leaderboard persists reload','CLI exports same on-disk entries'],page_errors:errors,leaderboard_test_data:'Browser_4 is automated test gameplay, isolated data directory; not user leaderboard'};
+ writeFileSync(`${folder}/browser.json`,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
+}finally{await browser?.close();server?.kill();rmSync(dataDir,{recursive:true,force:true});}

@@ -1,0 +1,5 @@
+export function scoreForm(saved){return saved?'<p role="status">Đã lưu điểm của lượt chơi này.</p>':`<form id="score-form"><label for="player-name">Tên người chơi (3–12 ký tự A–Z, a–z, 0–9, _)</label><input id="player-name" name="name" minlength="3" maxlength="12" pattern="[A-Za-z0-9_]{3,12}" required autocomplete="nickname"><button type="submit">Lưu điểm</button><p id="score-message" role="status"></p></form>`;}
+export async function leaderboardHtml(){const response=await fetch('/api/leaderboard');const data=await response.json();if(!response.ok)throw new Error(data.error??'Không tải được bảng xếp hạng');
+ const rows=data.entries.map((e,i)=>`<tr><td>${i+1}</td><td>${e.name}</td><td>${e.score}</td><td>${e.nights_won}/3</td><td>${new Date(e.achieved_at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})}</td></tr>`).join('');
+ return `<h2>Bảng xếp hạng</h2><p>Top 10 · Thời gian Việt Nam</p>${rows?`<table><thead><tr><th>Hạng</th><th>Tên</th><th>Điểm</th><th>Đêm</th><th>Đạt lúc</th></tr></thead><tbody>${rows}</tbody></table>`:'<p>Chưa có thành tích được lưu.</p>'}`;
+}
