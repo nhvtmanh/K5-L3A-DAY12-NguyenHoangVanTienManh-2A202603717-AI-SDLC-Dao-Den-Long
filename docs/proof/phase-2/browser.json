@@ -1,0 +1,21 @@
+{
+  "browser": "157.0.8103.80",
+  "viewport": "1280x720",
+  "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "average_fps": 120.21006809241399,
+  "fps_requirement_met": true,
+  "measurement": "5s requestAnimationFrame after 2s warmup; normal Night1 with default entities; browser GPU reported in renderer field",
+  "page_errors": [],
+  "passed": [
+    "menu/intro/playing",
+    "mouse/keyboard smoke",
+    "pause freezes sim but advances tick",
+    "settings survive reload",
+    "restart same night"
+  ],
+  "limits": [
+    "No listening test of synthesized audio",
+    "No manual playthrough of all three nights",
+    "FPS measured in this browser environment, not the common grading machine"
+  ]
+}

@@ -1,3 +1,13 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:,"><title>Đảo Đèn Lồng · Phase 1</title></head>
-<body><main id="game"></main><aside><span>ĐÊM 1 · ĐẢO BẾN</span><h1>Đảo Đèn Lồng</h1><p id="hud"></p><p id="status" role="status"></p><p id="interaction"></p><p>WASD: di chuyển · Space: nhảy<br>E: nạp đèn · Q: tỏa sáng · R: chơi lại</p><small id="camera-help">Bấm vào đảo để dùng chuột · Hoặc giữ chuột phải và kéo</small><button id="restart">Chơi lại</button></aside><script type="module" src="/src/web/main.js"></script></body></html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:,"><title>Đảo Đèn Lồng · Ba hòn đảo</title></head>
+<body><main id="game" aria-label="Game 3D Đảo Đèn Lồng"></main>
+<section id="hud" hidden>
+ <div class="hud-top"><div id="flames" aria-label="Ngọn Lửa"></div><time id="timer"></time><div><span id="lantern-count"></span><strong id="score"></strong></div></div>
+ <div id="night-name"></div><div id="wind-warning" role="status"></div>
+ <div id="interaction"></div><div id="mote-bar" aria-label="Đom đóm"></div>
+ <div id="cooldowns"><span id="dash-status"></span><span id="pulse-status"></span><span id="charm-status"></span></div>
+ <div id="objective-arrow" hidden></div><div id="camera-help">Bấm vào đảo để xoay chuột · Esc/P tạm dừng</div>
+</section>
+<div id="overlay"><section id="panel" aria-live="polite"></section></div>
+<div id="controls">WASD di chuyển · Chuột nhìn · Space nhảy · Shift lướt · E nạp · Q tỏa sáng · Esc/P tạm dừng</div>
+<script type="module" src="/src/web/main.js"></script></body></html>

@@ -1,4 +1,56 @@
-# Đảo Đèn Lồng — Phase 1
+# Đảo Đèn Lồng — Phase 2: Ba hòn đảo
+
+Game 3D JavaScript + Three.js + Vite, logic thuần Node.js theo **Test Contract v1.1**.
+Yêu cầu Node.js >=22.12, npm và trình duyệt hỗ trợ WebGL2. Không cần tài khoản/API key.
+
+```sh
+npm ci
+npm run dev
+```
+
+Mở URL Vite, chọn **Bắt đầu → Vào Đêm**. Trên PowerShell nếu npm.ps1 bị chặn thì dùng npm.cmd.
+Bản web là đường chạy chung cho Windows/macOS/Linux; build bằng `npm run build`, phục vụ bằng `npm run preview`.
+
+| Điều khiển | Thao tác |
+|---|---|
+| Đi theo camera | WASD |
+| Xoay camera | Click vào đảo rồi di chuột; chuột phải kéo nếu không dùng khóa chuột |
+| Nhảy / lướt | Space / Shift |
+| Nạp đèn / tỏa sáng | E / Q |
+| Tạm dừng | Esc hoặc P; có tiếp tục, chơi lại Đêm, cài đặt, về menu |
+
+Đêm1/2/3: Đảo Bến/Cau/Chuông, 5/6/7 đèn và 300/330/360s. Mỗi đèn cần10 đom đóm,
+mang tối đa10, nạp từng phần được. Chạy6m/s, dash14m/s/0.2s hồi1.5s; Bùa Gió tăng chạy7.2 và bỏ hồi dash.
+Thắng đi tiếp, thua chơi lại chính Đêm đó; thắng Đêm3 hiện Bình Minh. Âm lượng và độ nhạy chuột lưu trên trình duyệt.
+Âm thanh tự tổng hợp bằng WebAudio, bắt đầu sau thao tác của người chơi; không tải asset ngoài.
+
+**Điểm chuẩn:** +10 mỗi đom đóm **nạp**, +100/đèn sáng, +5/Bóng Mực trúng pulse (mỗi con mỗi lần).
+Khi thắng cộng `floor(giây còn lại)*2 + máu còn lại*50`. Tổng hành trình chỉ cộng các Đêm đã thắng.
+
+```sh
+node src/headless/cli.js --seed 7 --night 2 --ticks 19800 --out result.jsonl
+```
+
+Headless nhận --night1/2/3, --scenario, --inputs và --snapshot-every; không cửa sổ/GPU/audio.
+Tick lịch vẫn tăng khi pause; sim_tick/timers/spawn chỉ chạy khi playing. Scenario/inputs sai trả mã2, runtime lỗi trả mã khác0.
+Chi tiết yêu cầu và các quyết định đã duyệt: [spec/acceptance criteria](docs/phase-2-spec.md).
+
+Kiểm chứng:
+
+```sh
+npm test
+npm run verify:phase2
+npm run verify:phase1
+```
+
+Lệnh cuối chạy hồi quy Đêm1 với số **mới**; không ghi đè bằng chứng của tag phase-1.
+Sau build, `npm run test:browser` cần Chrome cài sẵn (hoặc BROWSER_CHANNEL=msedge), đoFPS1280×720 và kiểm tra menu/pause/settings/retry.
+[Bàn giao Phase2 và giới hạn](docs/phase-2-delivery.md) · [Bằng chứng](docs/proof/phase-2/verification.json) · [FPS/browser](docs/proof/phase-2/browser.json).
+Mã game giữ bản quyền, chỉ cho xem/chấm bài theo [LICENSE](LICENSE); nguồn ở [CREDITS.md](CREDITS.md).
+
+<details><summary>Ghi nhận Phase 1 — thông số cũ, xem tag phase-1 để chạy đúng phiên bản</summary>
+
+## Đảo Đèn Lồng — Phase 1 (lịch sử)
 
 JavaScript + Three.js + Vite cho bản web; Node.js chạy cùng logic ở chế độ headless.
 Yêu cầu Node.js >=22.12 và npm. Chạy trên Windows, macOS hoặc Linux có Node.js phù hợp.
@@ -72,6 +124,8 @@ Mã game giữ bản quyền, cho phép xem/chạy/chấm bài theo [LICENSE](LI
 Chưa thêm cơ chế sáng tạo ngoài PRD. Đồ họa ban đầu dựng từ khối hình học bằng code.
 
 ---
+
+</details>
 
 # Tài liệu lab: Day 12 — AI SDLC: Đảo Đèn Lồng
 

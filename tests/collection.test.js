@@ -7,12 +7,12 @@ import { join } from 'node:path';
 import { createGame, step, snapshot, TUNING } from '../src/core/game.js';
 
 test('pickup is inclusive in XZ, capacity leaves excess motes, scenario grants no score', () => {
-  const g = createGame({ random_motes: false, player: { pos: [0, 8, 0], carried: 19 }, motes: [[1, 0, 0], [0, 0, 0], [1.001, 0, 0]] });
+  const g = createGame({ random_motes: false, player: { pos: [0, 0, 0], carried: 9 }, motes: [[1, 0, 0], [0, 0, 0], [1.001, 0, 0]] });
   assert.equal(g.score, 0);
   assert.equal(snapshot(g).motes_active, 3);
-  assert.deepEqual(step(g), [{ type: 'event', tick: 1, name: 'mote_picked', data: { carried: 20 } }]);
-  assert.equal(g.score, 10); assert.equal(g.motes.length, 2);
-  step(g); assert.equal(g.score, 10); assert.equal(g.motes.length, 2);
+  assert.deepEqual(step(g), [{ type: 'event', tick: 1, name: 'mote_picked', data: { carried: 10 } }]);
+  assert.equal(g.score, 0); assert.equal(g.motes.length, 2);
+  step(g); assert.equal(g.score, 0); assert.equal(g.motes.length, 2);
   const outside = createGame({ random_motes: false, motes: [[1.001, 0, 0]] });
   assert.deepEqual(step(outside), []); assert.equal(outside.player.carried, 0);
 });
@@ -20,12 +20,12 @@ test('pickup is inclusive in XZ, capacity leaves excess motes, scenario grants n
 test('partial deposits, nearest unlit lantern, inclusive radius, and interaction rising edges', () => {
   const g = createGame({ random_motes: false, player: { carried: 3 }, lanterns: [{ id: 'L1', pos: [2, 0, 0] }] });
   assert.deepEqual(step(g, { interact: true }), [{ type: 'event', tick: 1, name: 'deposit', data: { lantern_id: 'L1', amount: 3, deposited: 3 } }]);
-  g.player.carried = 20;
+  g.player.carried = 10;
   assert.deepEqual(step(g, { interact: true }), []);
   step(g, { interact: false });
   const events = step(g, { interact: true });
   assert.deepEqual(events.map(e => e.name), ['deposit', 'lantern_lit']);
-  assert.equal(events[0].data.amount, 7); assert.equal(g.player.carried, 13); assert.equal(g.score, 100);
+  assert.equal(events[0].data.amount, 7); assert.equal(g.player.carried, 3); assert.equal(g.score, 200);
   step(g, { interact: false }); assert.deepEqual(step(g, { interact: true }), []);
   const nearest = createGame({ random_motes: false, player: { carried: 20 }, lanterns: [{ id: 'L1', pos: [2, 0, 0] }, { id: 'L2', pos: [1, 0, 0] }] });
   assert.equal(step(nearest, { interact: true })[0].data.lantern_id, 'L2');
@@ -40,8 +40,9 @@ test('seeded initial distribution and scenario overrides', () => {
   assert.deepEqual(snapshot(createGame({}, 42)), snapshot(createGame({}, 42)));
   assert.notDeepEqual(createGame({}, 42).motes, createGame({}, 43).motes);
   const g = createGame({}, 42);
-  assert.equal(g.motes.length, 100);
-  assert.ok(g.motes.every(m => Math.hypot(m.pos[0], m.pos[2]) <= 28));
+  assert.equal(g.motes.length, 20);
+  assert.equal(new Set(g.motes.map(m=>m.pos.join(','))).size,20);
+  assert.ok(g.motes.every(m => Math.hypot(m.pos[0], m.pos[2]) <= 33.000001));
   assert.equal(createGame({ random_motes: false }).motes.length, 0);
   assert.equal(createGame({ motes: [] }).motes.length, 0);
   assert.equal(createGame({ random_motes: true, motes: [[0, 0, 0]] }).motes.length, 1);
@@ -65,7 +66,7 @@ test('all five initially unlit lanterns can be completed using finite motes', ()
   assert.equal(g.player.carried, 0); assert.equal(g.motes.length, 0);
   assert.equal(events.filter(e => e.name === 'mote_picked').length, 40);
   assert.deepEqual(events.filter(e => e.name === 'lantern_lit').map(e => e.data.lantern_id), ['L1', 'L2', 'L3', 'L4', 'L5']);
-  assert.equal(g.score, 1648);
+  assert.equal(g.score, 1748);
 });
 
 test('terminal precedence and win reward applied only once', () => {
@@ -90,14 +91,14 @@ test('CLI collection-to-win fixture has exact events, snapshots and deterministi
       previous = raw;
       const rows = raw.trim().split('\n').map(JSON.parse);
       assert.equal(rows[0].tick, 0); assert.equal(rows[0].score, 0); assert.equal(rows[0].player.carried, 9);
-      assert.deepEqual(rows.filter(r => r.type === 'event'), [
+      assert.deepEqual(rows.filter(r => r.type === 'event' && r.tick>0), [
         { type: 'event', tick: 1, name: 'mote_picked', data: { carried: 10 } },
         { type: 'event', tick: 1, name: 'deposit', data: { lantern_id: 'L1', amount: 10, deposited: 10 } },
         { type: 'event', tick: 1, name: 'lantern_lit', data: { lantern_id: 'L1' } },
         { type: 'event', tick: 1, name: 'game_over', data: { result: 'won', reason: 'all_lit' } },
       ]);
       assert.equal(rows.at(-2).player.carried, 0); assert.equal(rows.at(-2).motes_active, 0);
-      assert.deepEqual(rows.at(-1), { type: 'end', ticks: 1, state: 'won', score: 858 });
+      assert.deepEqual(rows.at(-1), { type: 'end', ticks: 1, state: 'won', score: 948 });
     }
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

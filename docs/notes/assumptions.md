@@ -1,5 +1,7 @@
 # Phase 1 — Giả định được người dùng duyệt
 
+Lịch sử Phase1. Ticket-02 thay các số tự chọn; dùng docs/phase-2-spec.md và game.contract.json1.1 cho bản hiện tại. Tag phase-1 giữ bản cũ.
+
 Đã chọn JavaScript ESM + Three.js + Vite, Node.js headless. Node >=22.12.
 Logic dùng chung, 60 bước/giây, đảo bán kính 30m, giới hạn chân ở bán kính 29m.
 Tốc độ 5m/s, 3 máu, đêm 300 giây. Nhảy vận tốc đầu 5m/s, trọng lực 9.8m/s².

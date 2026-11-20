@@ -3,25 +3,40 @@ import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { createGame, step } from '../src/core/game.js';
 
-const directory = 'docs/proof/phase-1';
+const directory = 'docs/proof/phase-2/regression-night1';
 mkdirSync(directory, { recursive: true });
 const game = createGame({}, 7), frames = [];
+let targetId=null;
 while (game.tick < 18000 && game.state === 'playing') {
   const p = game.player.pos;
   const distance = o => Math.hypot(o.pos[0] - p[0], o.pos[2] - p[2]);
-  const lamp = game.lanterns.filter(l => !l.lit).sort((a, b) => distance(a) - distance(b))[0];
-  const target = game.player.carried >= 10 - lamp.deposited || !game.motes.length
-    ? lamp : [...game.motes].sort((a, b) => distance(a) - distance(b))[0];
+  const lamps=game.lanterns.filter(l=>!l.lit).sort((a,b)=>distance(a)-distance(b));
+  const candidates=game.player.carried>=10-lamps[0].deposited||!game.motes.length?lamps:game.motes;
+  const target=candidates.find(o=>o.id===targetId)??[...candidates].sort((a,b)=>distance(a)-distance(b))[0];
+  targetId=target.id;
   const d = distance(target);
+  const goal=[(target.pos[0]-p[0])/Math.max(.01,d),(target.pos[2]-p[2])/Math.max(.01,d)];
+  const threats=game.shades.filter(s=>!['stunned','spawning','recoil'].includes(s.state));
+  let heading=goal,best=-Infinity;
+  // Controller-only avoidance. The resulting ordinary inputs are replayed by the unmodified CLI.
+  for(let j=0;j<32;j++){
+    const a=j*Math.PI/16,v=[Math.cos(a),Math.sin(a)],future=[p[0]+v[0]*4.2,p[2]+v[1]*4.2];
+    let score=(v[0]*goal[0]+v[1]*goal[1])*3;
+    const radius=Math.hypot(...future);if(radius>38)score-=(radius-38)*20;
+    for(const s of threats){const sd=distance(s),dx=(p[0]-s.pos[0])/Math.max(.01,sd),dz=(p[2]-s.pos[2])/Math.max(.01,sd);const predicted=[s.pos[0]+dx*2.8,s.pos[2]+dz*2.8];const pd=Math.hypot(future[0]-predicted[0],future[1]-predicted[1]);score-=Math.max(0,3-pd)**2*2;}
+    if(score>best){best=score;heading=v;}
+  }
+  if(d<.5&&!lamps.includes(target))heading=[0,0];
+  const danger=Math.min(...threats.map(distance));
   const frame = {
     tick: game.tick,
-    move: d > .5 ? [(target.pos[0] - p[0]) / d, (target.pos[2] - p[2]) / d] : [0, 0],
-    interact: d <= 2 && target === lamp && game.tick % 2 === 0,
-    pulse: game.player.carried >= 3 && game.tick >= game.pulseReadyTick
-      && game.shades.some(s => s.state !== 'stunned' && distance(s) < 2),
+    move:heading,interact:d<=2&&lamps.includes(target)&&game.tick%2===0,
+    dash:game.dashCd===0&&danger<6&&d>2,
+    pulse:game.player.carried>=3&&game.pulseCd===0&&danger<1.5,
   };
   frames.push(frame); step(game, frame);
 }
+if(game.state!=='won')console.error(JSON.stringify({state:game.state,tick:game.tick,pos:game.player.pos,score:game.score,flames:game.player.flames,carried:game.player.carried,lit:game.lanterns.filter(l=>l.lit).length,motes:game.motes.length}));
 assert.equal(game.state, 'won', 'Default Night 1 route must win without scenario overrides');
 writeFileSync(`${directory}/night1.inputs.json`, JSON.stringify({ frames }) + '\n');
 const run = (out, extra) => {

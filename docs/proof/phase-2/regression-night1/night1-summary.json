@@ -1,0 +1,28 @@
+{
+  "seed": 7,
+  "scenario": "none; default Night 1",
+  "deterministic": true,
+  "won": {
+    "type": "end",
+    "ticks": 17873,
+    "state": "won",
+    "score": 1164
+  },
+  "idle_loss": {
+    "type": "end",
+    "ticks": 3571,
+    "state": "lost",
+    "score": 0
+  },
+  "events": {
+    "night_start": 1,
+    "mote_picked": 90,
+    "shade_spawned": 6,
+    "dash": 60,
+    "deposit": 5,
+    "lantern_lit": 5,
+    "player_hit": 2,
+    "pulse": 13,
+    "game_over": 1
+  }
+}

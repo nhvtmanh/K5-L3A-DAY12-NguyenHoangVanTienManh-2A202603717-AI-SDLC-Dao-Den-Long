@@ -1,0 +1,12 @@
+Phase 2 pre-change baseline
+Source commit: 04da252428370ce9a1af2763022f9b9a8b2e9c08
+Existing tag phase-1 points to that same commit.
+Working tree was clean before planning files were added.
+
+Executed npm test before changing gameplay:
+19 tests passed; 0 failed. Existing movement, camera, collection, combat,
+determinism, scenario/CLI and contract tests all passed.
+
+This is Phase 1 baseline evidence, not proof of Phase 2 compliance.
+New Phase 2 standardized tuning will deliberately supersede certain old numerical
+expectations. Each affected test group must be updated with a recorded reason.

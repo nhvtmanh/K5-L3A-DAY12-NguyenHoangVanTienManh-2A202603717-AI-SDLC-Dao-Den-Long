@@ -1,0 +1,21 @@
+Phase 2 fresh-source installation verification
+Environment: Windows, Node v24.18.0, npm11.16.0.
+
+Copied 85 tracked/untracked non-ignored source/data files into .scratch/phase2-clean-install.
+No node_modules, dist or .git was copied. Installed dependencies using npm ci --offline
+from machine npm download cache: 17 packages installed, installation passed.
+
+Initial fresh-source run: npm test passed30/30, build passed, verify:phase2 and verify:phase1 passed.
+After final drifter-ID robustness fix, copied the changed simulation and test into that
+already fresh-installed directory and reran tests/build:31/31 passed; build passed.
+No dependency inputs changed during the final source fix.
+
+Same build output as workspace: JS509.94kB, gzip132.19kB,13 modules, Vite7.3.8.
+Standardized default Night1 replay: won at17873ticks/1164points; idle lost at3571ticks.
+Headless scenarios and 21600tick benchmarks for nights1/2/3 passed in the fresh environment.
+
+Warnings: npm esbuild allowScripts warning; Vite JS chunk above500kB. These were retained,
+not suppressed. Actual installation and build completed successfully.
+
+Scope: this is fresh-source installation on Windows, not an authenticated/remote clone,
+Linux/macOS execution or proof of published phase-2 tag. The latter requires Git release.

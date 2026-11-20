@@ -40,3 +40,23 @@
 - Playwright là dependency kiểm chứng; không thay đổi runtime game/headless.
 - Kiểm tra từ nguồn sạch tại .scratch/phase1-clean-install: npm ci offline (không tái dùng node_modules/dist), 19 test, build và replay đều đạt.
 - Lệnh commit cần quyền ghi .git đã bị từ chối; chưa commit/tag/push. Không thay thế bằng tag trỏ vào commit tài liệu ban đầu, không tái tạo lịch sử giả.
+
+## Phase 2 — Ticket-02
+
+- Khi bắt đầu: workspace sạch, HEAD và tag phase-1 cùng04da252;19test baseline đạt.
+- Lưu ticket nguyên văn, so luật và viết kế hoạch/acceptance criteria trước code. Hỏi3nhóm giả định;
+  người dùng duyệt cả3, chọn xuất phátĐêm3(0,0,0), tầng0 đi dưới tầng2.
+- Tách maps/tuning, nâng simulation và CLI1.1; thêm campaign, HUD, settings/localStorage, WebAudio.
+- Cập nhật regression theo số chuẩn, ghi lý do ở docs/phase-2-delivery.md; không tắt test/đổi tagphase1.
+- Bộ controllerPhase1 cũ thua khi enemy nhanh/sức chứa giảm. Thêm steering/dash cho controller kiểm chứng,
+  không sửa luật game; replay thường thắng5đèn và so hai output CLI giống hệt.
+- Kiểm tra giúp phát hiện expectationcũ: instantpush/invuln120/scorepickup không còn hợp lệ; sửa theo ticket.
+- Kiểm tra drifterdrop xác nhận đồ thả được nhặt từ tick sau; sửa test không giữ expectation đồ vẫn còn khi đã nhặt.
+- Safezone dùng mục tiêu trên mép trong đảo, giữ tie ổn định để tránh nhiễu floatingpoint khi trùng tâm.
+- Lần đo ép softwareSwiftShader10.89FPS không đạt. Đổi môi trường đo sangGPU AMDthật, khoảng120FPS;
+  ghi rõ renderer/cấu hình, không sửa tay số liệu. Cùng máy Ryzen55600H/Node24.18.
+- Đã cập nhật AGENTS cho1.1/tickorder/clarifications. Không có skill/hook mới được tạo; giữ tất cả harness đã dùng.
+- Token/chi phí chưa có thống kê đáng tin cậy. Tiết kiệm bằng logic chung, fixtures nhỏ, benchmark có scope,
+  dùngWebAudio thay tài sảnngoài và không đổi công nghệ.
+- Kết quả cuối cục bộ:31test đạt; nguồn sạch cài bằng npmci offline, test/build/replays đạt.
+  Bổ sung case ID Gió Lạc scenario không được trùng ID sinh tự động. Không ghi đè proofPhase1.
